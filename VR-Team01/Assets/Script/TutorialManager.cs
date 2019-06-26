@@ -11,13 +11,13 @@ public class TutorialManager : MonoBehaviour
     public GameObject hands;
     public GameObject startButton;
     
-    // Start is called before the first frame update
+   
     void Start()
     {
         StartCoroutine(LookAround());
     }
 
-    // Update is called once per frame
+    
     void Update()
     {
         
