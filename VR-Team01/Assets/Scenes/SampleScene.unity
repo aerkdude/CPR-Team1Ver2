@@ -96,7 +96,7 @@ LightmapSettings:
     m_PVRFilteringAtrousPositionSigmaAO: 1
     m_ShowResolutionOverlay: 1
     m_ExportTrainingData: 0
-  m_LightingDataAsset: {fileID: 112000000, guid: 39360e230ce825f42ae376f42b50fa09,
+  m_LightingDataAsset: {fileID: 112000000, guid: 181346b37bc66dc46a98f76107127078,
     type: 2}
   m_UseShadowmask: 1
 --- !u!196 &4
@@ -362,7 +362,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &194622179
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1739,7 +1739,7 @@ Animator:
   m_GameObject: {fileID: 775255539}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: dee06db10a2176d4881a260be0b8be03, type: 2}
+  m_Controller: {fileID: 9100000, guid: b1f4e3296fe84a44ca61cb36901f3979, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -1913,7 +1913,7 @@ Animator:
   m_GameObject: {fileID: 833362104}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: dee06db10a2176d4881a260be0b8be03, type: 2}
+  m_Controller: {fileID: 9100000, guid: a8342c7527744f64d91922b8937fd68f, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -2053,12 +2053,33 @@ MonoBehaviour:
   - "\u0E04\u0E27\u0E32\u0E21\u0E40\u0E23\u0E47\u0E27\u0E43\u0E19\u0E01\u0E32\u0E23\u0E1B\u0E31\u0E4A\u0E21\u0E15\u0E49\u0E2D\u0E07\u0E44\u0E21\u0E48\u0E40\u0E01\u0E34\u0E19\u0E01\u0E35\u0E48\u0E04\u0E23\u0E31\u0E49\u0E07\u0E15\u0E48\u0E2D\u0E19\u0E32\u0E17\u0E35"
   - "\u0E15\u0E2D\u0E19\u0E1B\u0E31\u0E4A\u0E21\u0E04\u0E27\u0E23\u0E01\u0E14\u0E25\u0E36\u0E01\u0E2D\u0E22\u0E48\u0E32\u0E07\u0E19\u0E49\u0E2D\u0E22\u0E01\u0E35\u0E48\u0E40\u0E0B\u0E47\u0E19"
   hint: 
-  questionNo: 0
+  paper1: {fileID: 0}
+  paper2: {fileID: 0}
+  paper3: {fileID: 0}
+  paper4: {fileID: 0}
+  paper1Select: {fileID: 0}
+  paper2Select: {fileID: 0}
+  paper3Select: {fileID: 0}
+  paper4Select: {fileID: 0}
+  paper1Text: {fileID: 0}
+  paper2Text: {fileID: 0}
+  paper3Text: {fileID: 0}
+  paper4Text: {fileID: 0}
+  paper1InputField: {fileID: 0}
+  paper2InputField: {fileID: 0}
+  paper3InputField: {fileID: 0}
+  paper4InputField: {fileID: 0}
+  paperOnScreen: 0
   curSelect: 0
-  slot1: 0
-  slot2: 0
-  slot3: 0
-  slot4: 0
+  slot1Full: 0
+  slot2Full: 0
+  slot3Full: 0
+  slot4Full: 0
+  questionNo: 0
+  question1No: 0
+  question2No: 0
+  question3No: 0
+  question4No: 0
   InputAnswer: {fileID: 608582341}
 --- !u!4 &935408406
 Transform:
@@ -2769,7 +2790,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1242473134
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3076,7 +3097,7 @@ Animator:
   m_GameObject: {fileID: 1484294753}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: dee06db10a2176d4881a260be0b8be03, type: 2}
+  m_Controller: {fileID: 9100000, guid: 78ea98072f82c1b4cb406783a43bc65b, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -3139,7 +3160,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1518604264
 RectTransform:
   m_ObjectHideFlags: 0

@@ -11,6 +11,7 @@ public class Question : MonoBehaviour
     public GameObject shoulder;
     public GameObject hintPanel;
     public GameObject guidePanel;
+
     public Text questionText;
     public Text hintText;
     public Text guideText;
@@ -22,14 +23,39 @@ public class Question : MonoBehaviour
     public string[] question;
     private string guess;
     public string hint;
-    public int questionNo;
+    
 
     //select paper
+    public GameObject paper1;
+    public GameObject paper2;
+    public GameObject paper3;
+    public GameObject paper4;
+    public GameObject paper1Select;
+    public GameObject paper2Select;
+    public GameObject paper3Select;
+    public GameObject paper4Select;
+    public Text paper1Text;
+    public Text paper2Text;
+    public Text paper3Text;
+    public Text paper4Text;
+    public InputField paper1InputField;
+    public InputField paper2InputField;
+    public InputField paper3InputField;
+    public InputField paper4InputField;
+
+    public int paperOnScreen;
     public int curSelect;
-    public bool slot1;
-    public bool slot2;
-    public bool slot3;
-    public bool slot4;
+    public bool slot1Full;
+    public bool slot2Full;
+    public bool slot3Full;
+    public bool slot4Full;
+
+    public int questionNo;
+
+    public int question1No;
+    public int question2No;
+    public int question3No;
+    public int question4No;
 
     public InputField InputAnswer;
    // public int[] answer;
@@ -39,7 +65,6 @@ public class Question : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        curSelect = 0;
         guidePanel.SetActive(false);
         hintPanel.SetActive(false);
         canShowHint = false;
@@ -48,14 +73,18 @@ public class Question : MonoBehaviour
         hint = "";
         guess = "";
         hintText.text = "";
+        Timer = 0;
 
         StartCoroutine(preQuestion1());
 
         //paper system
-        slot1 = false;
-        slot2 = false;
-        slot3 = false;
-        slot4 = false;
+        paperOnScreen = 0;
+        curSelect = 0;
+
+        slot1Full = false;
+        slot2Full = false;
+        slot3Full = false;
+        slot4Full = false;
     }
 
     // Update is called once per frame
@@ -95,25 +124,56 @@ public class Question : MonoBehaviour
             Timer = 0;
             questionCanvas.SetActive(false);
         }
-        /*
-        if (Timer <= 10)
-        {
-            // string input = InputAnswer.ToString();
-            Timer += Time.deltaTime;
-            questionNo = Random.Range(0, 4);
-            GameController.pushHp = 20.0f;
-            canShowHint = false;
-            //Debug.Log("questtion:" + questionNo);
-            questionCanvas.SetActive(false);
 
-        }
-        else if (Timer > 10 && Timer <= 20)
+        if (Timer < 10)
         {
-            GameController.pushHp = 2.0f;
-            questionCanvas.SetActive(true);
             Timer += Time.deltaTime;
-            canShowHint = true;
-            InputAnswer.ActivateInputField();
+            //GameController.pushHp = 20.0f;
+        }
+        else if (Timer >= 10 && Timer <= 50)
+        {
+            Timer += Time.deltaTime;
+
+            if (Timer >= 11 && Timer <= 50)
+            {
+                if(Timer >= 11)
+                {
+                    if(Timer == 11)
+                    {
+                        GetNewQuiz();
+                    }
+                    if(Timer >= 20)
+                    {
+                        if (Timer == 21)
+                        {
+                            GetNewQuiz();
+                        }
+                        if (Timer >= 30)
+                        {
+                            if (Timer == 31)
+                            {
+                                GetNewQuiz();
+                            }
+                            if (Timer >= 40)
+                            {
+                                if (Timer == 41)
+                                {
+                                    GetNewQuiz();
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if (Timer > 50)
+                {
+                    Timer = 50;
+                }
+                
+            }
+
+            
+            /*InputAnswer.ActivateInputField();
             if (questionNo == 0)
             {
                 hint = "4 นาที";
@@ -133,15 +193,13 @@ public class Question : MonoBehaviour
             {
                 hint = "5cm";
                 questionText.text = "" + question[3];
-            }
+            }*/
         }
-
         else
         {
             Timer = 0;
-            questionCanvas.SetActive(false);
         }
-        */
+        
     }
     void ProcessText()
     {
@@ -229,7 +287,26 @@ public class Question : MonoBehaviour
                 break;
         }*/
     }
-
+    public void GetNewQuiz()
+    {
+        
+        if(!slot4Full)
+        {
+            if (!slot3Full)
+            {
+                if (!slot2Full)
+                {
+                    question1No = Random.Range(0, 4);
+                    paper1Text.text = "" + question[question1No];
+                    if (!slot1Full)
+                    {
+                        question1No = Random.Range(0, 4);
+                        paper1Text.text = "" + question[question1No];
+                    }
+                }
+            }
+        }
+    }
     public void ShowHint()
     {
         hintText.text = "เฉลย: "+hint;
