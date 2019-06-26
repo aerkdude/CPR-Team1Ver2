@@ -11,7 +11,6 @@ public class Question : MonoBehaviour
     public GameObject shoulder;
     public GameObject hintPanel;
     public GameObject guidePanel;
-
     public Text questionText;
     public Text hintText;
     public Text guideText;
@@ -23,7 +22,6 @@ public class Question : MonoBehaviour
     public string[] question;
     private string guess;
     public string hint;
-    
 
     //select paper
     public GameObject paper1;
@@ -102,9 +100,14 @@ public class Question : MonoBehaviour
                 //ShowHint();
                 Timer = 0;
                 questionCanvas.SetActive(false);
+                
             }
         }
-
+        if (GameController.gameEnd)
+        {
+            guidePanel.SetActive(false);
+            guideText.text = "";
+        }
         //Shoulder Check
         if (hitShoulder)
         {
@@ -203,7 +206,7 @@ public class Question : MonoBehaviour
     }
     void ProcessText()
     {
-        /*guess = InputAnswer.text;
+        guess = InputAnswer.text;
         //Debug.Log(guess);
         switch (questionNo)
         {
@@ -285,7 +288,7 @@ public class Question : MonoBehaviour
                     StartCoroutine(PrepareCall());
                 }
                 break;
-        }*/
+        }
     }
     public void GetNewQuiz()
     {
@@ -387,6 +390,7 @@ public class Question : MonoBehaviour
         GameController.gameStart = true;
         GameController.timeStart = true;
         guideText.text = "เริ่มนับบเวลาถอยหลัง 2 นาที";
+        StartCoroutine(CprContinue());
     }
     IEnumerator CprContinue()
     {
