@@ -52,7 +52,7 @@ public class TutorialManager : MonoBehaviour
         guideText.text = "ลองผสานมือตามภาพ";
         hands.gameObject.SetActive(true);
         yield return new WaitForSeconds(10.0f);
-        guideText.text = "";
+        guideText.text = "กดปุ่มเพื่อเริ่มเกม";
         hands.gameObject.SetActive(false);
         ShowButton();
     }

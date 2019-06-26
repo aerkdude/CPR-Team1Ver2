@@ -25,7 +25,7 @@ public class Question : MonoBehaviour
 
     //private Text answerText;
 
-    // Start is called before the first frame update
+    
     void Start()
     {
         canShowHint = false;
@@ -38,7 +38,7 @@ public class Question : MonoBehaviour
         StartCoroutine(preQuestion1());
     }
 
-    // Update is called once per frame
+    
     void Update()
     {
         if (GameController.gameStart)
@@ -126,7 +126,6 @@ public class Question : MonoBehaviour
     void ProcessText()
     {
         guess = InputAnswer.text;
-        //Debug.Log(guess);
         switch (questionNo)
         {
             case 0:

@@ -21,6 +21,7 @@ public class GameController : MonoBehaviour
     public bool canPush;
     public int curHp;
     public static float pushHp;
+    public static float falseHp;
     // Start is called before the first frame update
     void Start()
     {
@@ -33,7 +34,8 @@ public class GameController : MonoBehaviour
         curTime = 120f;
         canPush = true;
         startTime = 120.0f;
-        pushHp = 20.0f;
+        pushHp = 5.0f;
+        //falseHp = 2.0f;
 
         
     }
@@ -85,6 +87,7 @@ public class GameController : MonoBehaviour
         if (!canPush)
         {
             greenCube.gameObject.SetActive(false);
+            //hpLeft -= falseHp;
         }
     }
 
