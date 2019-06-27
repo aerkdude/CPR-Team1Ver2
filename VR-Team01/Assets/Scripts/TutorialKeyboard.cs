@@ -38,7 +38,7 @@ public class TutorialKeyboard : MonoBehaviour
         inputObject.gameObject.SetActive(true);
         acceptbutton.SetActive(true);
         guideText.text = "กำลังจะเริ่มทำแบบทดสอบ ถ้าคุณพร้อมแล้วให้พิมพ์คำว่า “รับทราบ” ";
-        placeHolder.text = "“รับทราบ”";
+        placeHolder.text = "พิมพ์คำตอบของคุณลงในช่องนี้";
     }
 
     void ProcessText()
