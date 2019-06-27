@@ -18,6 +18,7 @@ public class Question : MonoBehaviour
     public static bool hitShoulder;
     public bool activeCancas;
     public float Timer;
+    private bool activateQuestion;
     public bool canShowHint;
     public string[] question;
     private string guess;
@@ -32,10 +33,10 @@ public class Question : MonoBehaviour
     public GameObject paper2Select;
     public GameObject paper3Select;
     public GameObject paper4Select;
-    public Text paper1Text;
-    public Text paper2Text;
-    public Text paper3Text;
-    public Text paper4Text;
+    public Text question1Text;
+    public Text question2Text;
+    public Text question3Text;
+    public Text question4Text;
     public InputField paper1InputField;
     public InputField paper2InputField;
     public InputField paper3InputField;
@@ -83,6 +84,15 @@ public class Question : MonoBehaviour
         slot2Full = false;
         slot3Full = false;
         slot4Full = false;
+        paper1.SetActive(false);
+        paper2.SetActive(false);
+        paper3.SetActive(false);
+        paper4.SetActive(false);
+
+        question1Text.text = "";
+        question2Text.text = "";
+        question3Text.text = "";
+        question4Text.text = "";
     }
 
     // Update is called once per frame
@@ -98,7 +108,6 @@ public class Question : MonoBehaviour
             {
                 ProcessText();
                 //ShowHint();
-                Timer = 0;
                 questionCanvas.SetActive(false);
                 
             }
@@ -115,7 +124,6 @@ public class Question : MonoBehaviour
             hitShoulder = false;
         }
         InputAnswer.ActivateInputField();
-
     }
 
     private void CprStart()
@@ -124,85 +132,47 @@ public class Question : MonoBehaviour
         {
             ProcessText();
             InputAnswer.clearInputField();
-            Timer = 0;
             questionCanvas.SetActive(false);
         }
-
-        if (Timer < 10)
+        if (Input.GetKeyDown(KeyCode.R)) //Send Answer
         {
-            Timer += Time.deltaTime;
-            //GameController.pushHp = 20.0f;
+            removePaper();
+            slot4Full = false;
         }
-        else if (Timer >= 10 && Timer <= 50)
+
+        //paper slot
+        if (slot1Full)
         {
-            Timer += Time.deltaTime;
-
-            if (Timer >= 11 && Timer <= 50)
-            {
-                if(Timer >= 11)
-                {
-                    if(Timer == 11)
-                    {
-                        GetNewQuiz();
-                    }
-                    if(Timer >= 20)
-                    {
-                        if (Timer == 21)
-                        {
-                            GetNewQuiz();
-                        }
-                        if (Timer >= 30)
-                        {
-                            if (Timer == 31)
-                            {
-                                GetNewQuiz();
-                            }
-                            if (Timer >= 40)
-                            {
-                                if (Timer == 41)
-                                {
-                                    GetNewQuiz();
-                                }
-                            }
-                        }
-                    }
-                }
-
-                if (Timer > 50)
-                {
-                    Timer = 50;
-                }
-                
-            }
-
-            
-            /*InputAnswer.ActivateInputField();
-            if (questionNo == 0)
-            {
-                hint = "4 นาที";
-                questionText.text = "" + question[0];
-            }
-            if (questionNo == 1)
-            {
-                hint = "100 ครั้ง:นาที";
-                questionText.text = "" + question[1];
-            }
-            if (questionNo == 2)
-            {
-                hint = "ไม่เกิน120ครั้ง:นาที";
-                questionText.text = "" + question[2];
-            }
-            if (questionNo == 3)
-            {
-                hint = "5cm";
-                questionText.text = "" + question[3];
-            }*/
+            paper1.SetActive(true);
         }
-        else
+        else if(!slot1Full)
         {
-            Timer = 0;
+            paper1.SetActive(false);
         }
-        
+        if (slot2Full)
+        {
+            paper2.SetActive(true);
+        }
+        else if(!slot2Full)
+        {
+            paper2.SetActive(false);
+        }
+        if (slot3Full)
+        {
+            paper3.SetActive(true);
+        }
+        else if (!slot3Full)
+        {
+            paper3.SetActive(false);
+        }
+        if (slot4Full)
+        {
+            paper4.SetActive(true);
+        }
+        else if (!slot4Full)
+        {
+            paper4.SetActive(false);
+        }
     }
     void ProcessText()
     {
@@ -210,7 +180,7 @@ public class Question : MonoBehaviour
         //Debug.Log(guess);
         switch (questionNo)
         {
-            case 0:
+            /*case 0:
                 if (guess == "4")
                 {
                     Debug.Log("Correct");
@@ -257,7 +227,7 @@ public class Question : MonoBehaviour
                     Debug.Log("Wrong");
                     ResetAnswer();
                 }
-                break;
+                break;*/
 
                 //Pre question before CPR
             case 101:
@@ -290,24 +260,36 @@ public class Question : MonoBehaviour
                 break;
         }
     }
-    public void GetNewQuiz()
+    public void SpawnQuestion()
     {
-        
-        if(!slot4Full)
+        if (slot1Full) //if slot 1 full
         {
-            if (!slot3Full)
+            if (slot2Full) // if slot 2 full
             {
-                if (!slot2Full)
+                if (slot3Full) // if slot 3 full
                 {
-                    question1No = Random.Range(0, 4);
-                    paper1Text.text = "" + question[question1No];
-                    if (!slot1Full)
+                    if (!slot4Full) // if slot 4 empty place into slot 4
                     {
-                        question1No = Random.Range(0, 4);
-                        paper1Text.text = "" + question[question1No];
+                        slot4Full = true;
+                        question4Text.text = question[Random.Range(0, question.Length)];
                     }
                 }
+                if (!slot3Full) //if slot 3 empty place into slot 3
+                {
+                    slot3Full = true;
+                    question3Text.text = question[Random.Range(0, question.Length)];
+                }
             }
+            if (!slot2Full)//if slot 2 is empty place into slot 2
+            {
+                slot2Full = true;
+                question2Text.text = question[Random.Range(0, question.Length)];
+            }
+        }
+        if (!slot1Full) //if slot 1 is empty place in slot 1
+        {
+            slot1Full = true;
+            question1Text.text = question[Random.Range(0, question.Length)];
         }
     }
     public void ShowHint()
@@ -389,6 +371,7 @@ public class Question : MonoBehaviour
         yield return new WaitForSeconds(1.0f);
         GameController.gameStart = true;
         GameController.timeStart = true;
+        InvokeRepeating("spawnPaperEvery10Sec", 0.0f, 10.0f);
         guideText.text = "เริ่มนับบเวลาถอยหลัง 2 นาที";
         StartCoroutine(CprContinue());
     }
@@ -396,6 +379,20 @@ public class Question : MonoBehaviour
     {
         yield return new WaitForSeconds(3.0f);
         guideText.text = "P1 ทำ CPR / P2 คอยตอบคำถาม";
+    }
+    void spawnPaperEvery10Sec()
+    {
+        if (paperOnScreen < 4)
+        { 
+            Debug.Log("SpawnQuestion");
+            SpawnQuestion();
+            paperOnScreen++;
+        }
+    }
+    void removePaper()
+    {
+        Debug.Log("remove 1 paper");
+        paperOnScreen--;
     }
 }
 
