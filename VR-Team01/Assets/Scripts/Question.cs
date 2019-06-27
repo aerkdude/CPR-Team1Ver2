@@ -11,6 +11,8 @@ public class Question : MonoBehaviour
     public GameObject shoulder;
     public GameObject hintPanel;
     public GameObject guidePanel;
+    public GameObject quizPanel;
+    public Text quizScoreText;
     public Text questionText;
     public Text hintText;
     public Text guideText;
@@ -27,6 +29,7 @@ public class Question : MonoBehaviour
     private string guess3;
     private string guess4;
     public string hint;
+    public static int quizScore;
 
     //select paper
     public GameObject paper1;
@@ -72,7 +75,11 @@ public class Question : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        paper1Select.SetActive(false);
+        quizPanel.SetActive(false);
+        quizScore = 0;
+        quizScoreText.text = "";
+
+    paper1Select.SetActive(false);
         paper2Select.SetActive(false);
         paper3Select.SetActive(false);
         paper4Select.SetActive(false);
@@ -427,7 +434,7 @@ public class Question : MonoBehaviour
         slot2Full = false;
         paperOnScreen--;
         //Checker
-        switch (question1No)
+        switch (question2No)
         {
             case 0:
                 if (guess2 == "4")
@@ -482,7 +489,7 @@ public class Question : MonoBehaviour
         slot3Full = false;
         paperOnScreen--;
         //Checker
-        switch (question1No)
+        switch (question3No)
         {
             case 0:
                 if (guess3 == "4")
@@ -537,7 +544,7 @@ public class Question : MonoBehaviour
         slot4Full = false;
         paperOnScreen--;
         //Checker
-        switch (question1No)
+        switch (question4No)
         {
             case 0:
                 if (guess4 == "4")
@@ -698,6 +705,8 @@ public class Question : MonoBehaviour
         yield return new WaitForSeconds(1.0f);
         GameController.gameStart = true;
         GameController.timeStart = true;
+        quizPanel.SetActive(true);
+        quizScoreText.text = "Quiz Score: " + quizScore;
         canShowHint = false;
         InvokeRepeating("spawnPaperEvery10Sec", 0.0f, 10.0f);
         guideText.text = "เริ่มนับบเวลาถอยหลัง 2 นาที";
@@ -725,6 +734,7 @@ public class Question : MonoBehaviour
     void AnswerCorrect()
     {
         Debug.Log("Correct");
+        quizScore++;
     }
 }
 
