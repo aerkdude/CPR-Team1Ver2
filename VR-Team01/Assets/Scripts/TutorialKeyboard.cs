@@ -9,6 +9,7 @@ public class TutorialKeyboard : MonoBehaviour
     public GameObject inputObject;
     public InputField inputField;
     public GameObject fadeIn;
+    public GameObject acceptbutton;
     public Text guideText;
     public Text placeHolder;
     private string guess;
@@ -35,14 +36,15 @@ public class TutorialKeyboard : MonoBehaviour
     {
         yield return new WaitForSeconds(13.0f);
         inputObject.gameObject.SetActive(true);
-        guideText.text = "กำลังจะเริ่มทำแบบทดสอบ ถ้าคุณพร้อมแล้วให้พิมพ์คำว่า “ตกลง” ";
-        placeHolder.text = "“ตกลง”";
+        acceptbutton.SetActive(true);
+        guideText.text = "กำลังจะเริ่มทำแบบทดสอบ ถ้าคุณพร้อมแล้วให้พิมพ์คำว่า “รับทราบ” ";
+        placeHolder.text = "พิมพ์คำตอบของคุณลงในช่องนี้";
     }
 
     void ProcessText()
     {
         guess = inputField.text;
-        if(guess == "ตกลง")
+        if(guess == "รับทราบ")
         {
             StartCoroutine(waitFade());
             Debug.Log("ตกลงsssasdads");
