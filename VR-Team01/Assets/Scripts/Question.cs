@@ -22,6 +22,10 @@ public class Question : MonoBehaviour
     public bool canShowHint;
     public string[] question;
     private string guess;
+    private string guess1;
+    private string guess2;
+    private string guess3;
+    private string guess4;
     public string hint;
 
     //select paper
@@ -41,6 +45,10 @@ public class Question : MonoBehaviour
     public InputField paper2InputField;
     public InputField paper3InputField;
     public InputField paper4InputField;
+    public GameObject paper1InputObj;
+    public GameObject paper2InputObj;
+    public GameObject paper3InputObj;
+    public GameObject paper4InputObj;
 
     public int paperOnScreen;
     public int curSelect;
@@ -64,6 +72,11 @@ public class Question : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        paper1Select.SetActive(false);
+        paper2Select.SetActive(false);
+        paper3Select.SetActive(false);
+        paper4Select.SetActive(false);
+
         guidePanel.SetActive(false);
         hintPanel.SetActive(false);
         canShowHint = false;
@@ -74,6 +87,10 @@ public class Question : MonoBehaviour
         hintText.text = "";
         Timer = 0;
 
+        guess1 = "";
+        guess2 = "";
+        guess3 = "";
+        guess4 = "";
         StartCoroutine(preQuestion1());
 
         //paper system
@@ -128,16 +145,142 @@ public class Question : MonoBehaviour
 
     private void CprStart()
     {
-        if (Input.GetKeyDown(KeyCode.Return) && canShowHint) //Send Answer
+        if (paperOnScreen < 1)
         {
-            ProcessText();
-            InputAnswer.clearInputField();
-            questionCanvas.SetActive(false);
+            if (Input.GetKeyDown(KeyCode.Return) && canShowHint) //Send Answer
+            {
+                ProcessText();
+                InputAnswer.clearInputField();
+                questionCanvas.SetActive(false);
+            }
         }
         if (Input.GetKeyDown(KeyCode.R)) //Send Answer
         {
+            CancelInvoke("spawnPaperEvery10Sec");
+            InvokeRepeating("spawnPaperEvery10Sec", 10.0f, 10.0f);
             removePaper();
             slot4Full = false;
+        }
+        //paper select
+        if(paperOnScreen > 0)
+        {
+            if (Input.GetKeyDown(KeyCode.LeftArrow))
+            {
+                if (slot1Full)
+                {
+                    Debug.Log("select left");
+                    curSelect = 1;
+                    paper1InputObj.SetActive(true);
+                    paper2InputObj.SetActive(false);
+                    paper3InputObj.SetActive(false);
+                    paper4InputObj.SetActive(false);
+                    paper1InputField.ActivateInputField();
+                }
+            }
+            if (Input.GetKeyDown(KeyCode.UpArrow))
+            {
+                if (slot2Full)
+                {
+                    Debug.Log("select up");
+                    curSelect = 2;
+                    paper1InputObj.SetActive(false);
+                    paper2InputObj.SetActive(true);
+                    paper3InputObj.SetActive(false);
+                    paper4InputObj.SetActive(false);
+                    paper2InputField.ActivateInputField();
+                }
+            }
+            if (Input.GetKeyDown(KeyCode.DownArrow))
+            {
+                if (slot3Full)
+                {
+                    Debug.Log("select bottom");
+                    curSelect = 3;
+                    paper1InputObj.SetActive(false);
+                    paper2InputObj.SetActive(false);
+                    paper3InputObj.SetActive(true);
+                    paper4InputObj.SetActive(false);
+                    paper3InputField.ActivateInputField();
+                }
+            }
+            if (Input.GetKeyDown(KeyCode.RightArrow))
+            {
+                if (slot4Full)
+                {
+                    Debug.Log("select right");
+                    curSelect = 4;
+                    paper1InputObj.SetActive(false);
+                    paper2InputObj.SetActive(false);
+                    paper3InputObj.SetActive(false);
+                    paper4InputObj.SetActive(true);
+                    paper4InputField.ActivateInputField();
+                }
+            }
+
+            if (curSelect == 1)
+            {
+                paper1Select.SetActive(true);
+                paper2Select.SetActive(false);
+                paper3Select.SetActive(false);
+                paper4Select.SetActive(false);
+                if (slot1Full)
+                {
+                    if (Input.GetKeyDown(KeyCode.Return))
+                    {
+                        ProcessQuestion1();
+                    }
+                }
+            }
+            if (curSelect == 2)
+            {
+                paper1Select.SetActive(false);
+                paper2Select.SetActive(true);
+                paper3Select.SetActive(false);
+                paper4Select.SetActive(false);
+                if (slot2Full)
+                {
+                    if (Input.GetKeyDown(KeyCode.Return))
+                    {
+                        ProcessQuestion2();
+                    }
+                }
+            }
+            if (curSelect == 3)
+            {
+                paper1Select.SetActive(false);
+                paper2Select.SetActive(false);
+                paper3Select.SetActive(true);
+                paper4Select.SetActive(false);
+                if (slot1Full)
+                {
+                    if (Input.GetKeyDown(KeyCode.Return))
+                    {
+                        ProcessQuestion3();
+                    }
+                }
+            }
+            if (curSelect == 4)
+            {
+                paper1Select.SetActive(false);
+                paper2Select.SetActive(false);
+                paper3Select.SetActive(false);
+                paper4Select.SetActive(true);
+                if (slot1Full)
+                {
+                    if (Input.GetKeyDown(KeyCode.Return))
+                    {
+                        ProcessQuestion4();
+                    }
+                }
+            }
+            if(curSelect < 1 || curSelect > 4)
+            {
+                NoneSelect();
+            }
+        }
+        if(paperOnScreen < 1 || paperOnScreen > 4)
+        {
+            curSelect = 0;
         }
 
         //paper slot
@@ -174,66 +317,24 @@ public class Question : MonoBehaviour
             paper4.SetActive(false);
         }
     }
+    void NoneSelect()
+    {
+        paper1Select.SetActive(false);
+        paper2Select.SetActive(false);
+        paper3Select.SetActive(false);
+        paper4Select.SetActive(false);
+    }
     void ProcessText()
     {
         guess = InputAnswer.text;
         //Debug.Log(guess);
         switch (questionNo)
         {
-            /*case 0:
-                if (guess == "4")
-                {
-                    Debug.Log("Correct");
-                    ResetAnswer();
-                }
-                else
-                {
-                    Debug.Log("Wrong");
-                    ResetAnswer();
-                }
-                break;
-            case 1:
-                if (guess == "100")
-                {
-                    Debug.Log("Correct");
-                    ResetAnswer();
-                }
-                else
-                {
-                    Debug.Log("Wrong");
-                    ResetAnswer();
-                }
-                break;
-            case 2:
-                if (guess == "120")
-                {
-                    Debug.Log("Correct");
-                    ResetAnswer();
-                }
-                else
-                {
-                    Debug.Log("Wrong");
-                    ResetAnswer();
-                }
-                break;
-            case 3:
-                if (guess == "5")
-                {
-                    Debug.Log("Correct");
-                    ResetAnswer();
-                }
-                else
-                {
-                    Debug.Log("Wrong");
-                    ResetAnswer();
-                }
-                break;*/
-
                 //Pre question before CPR
             case 101:
                 if (guess == "4")
                 {
-                    Debug.Log("Correct");
+                    AnswerCorrect();
                     ResetAnswer();
                     StartCoroutine(DelayShoulderText());
                 }
@@ -247,7 +348,7 @@ public class Question : MonoBehaviour
             case 102:
                 if (guess == "1669")
                 {
-                    Debug.Log("Correct");
+                    AnswerCorrect();
                     ResetAnswer();
                     StartCoroutine(PrepareCall());
                 }
@@ -260,6 +361,227 @@ public class Question : MonoBehaviour
                 break;
         }
     }
+    void ProcessQuestion1()
+    {
+        guess1 = paper1InputField.text;
+        Debug.Log(guess1);
+        paper1InputField.clearInputField();
+        curSelect = 0;
+        NoneSelect();
+        paper1.SetActive(false);
+        slot1Full = false;
+        paperOnScreen--;
+        //Checker
+        switch (question1No)
+        {
+            case 0:
+                if (guess1 == "4")
+                {
+                    AnswerCorrect();
+                }
+                else
+                {
+                    Debug.Log("Wrong");
+                }
+                break;
+            case 1:
+                if (guess1 == "100")
+                {
+                    AnswerCorrect();
+                }
+                else
+                {
+                    Debug.Log("Wrong");
+                }
+                break;
+            case 2:
+                if (guess1 == "120")
+                {
+                    AnswerCorrect();
+                }
+                else
+                {
+                    Debug.Log("Wrong");
+                }
+                break;
+            case 3:
+                if (guess1 == "5")
+                {
+                    AnswerCorrect();
+                }
+                else
+                {
+                    Debug.Log("Wrong");
+                }
+                break;
+        }
+    }
+    void ProcessQuestion2()
+    {
+        guess2 = paper2InputField.text;
+        Debug.Log(guess2);
+        paper2InputField.clearInputField();
+        curSelect = 0;
+        NoneSelect();
+        paper2.SetActive(false);
+        slot2Full = false;
+        paperOnScreen--;
+        //Checker
+        switch (question1No)
+        {
+            case 0:
+                if (guess2 == "4")
+                {
+                    AnswerCorrect();
+                }
+                else
+                {
+                    Debug.Log("Wrong");
+                }
+                break;
+            case 1:
+                if (guess2 == "100")
+                {
+                    AnswerCorrect();
+                }
+                else
+                {
+                    Debug.Log("Wrong");
+                }
+                break;
+            case 2:
+                if (guess2 == "120")
+                {
+                    AnswerCorrect();
+                }
+                else
+                {
+                    Debug.Log("Wrong");
+                }
+                break;
+            case 3:
+                if (guess2 == "5")
+                {
+                    AnswerCorrect();
+                }
+                else
+                {
+                    Debug.Log("Wrong");
+                }
+                break;
+        }
+    }
+    void ProcessQuestion3()
+    {
+        guess3 = paper3InputField.text;
+        Debug.Log(guess3);
+        paper3InputField.clearInputField();
+        curSelect = 0;
+        NoneSelect();
+        paper3.SetActive(false);
+        slot3Full = false;
+        paperOnScreen--;
+        //Checker
+        switch (question1No)
+        {
+            case 0:
+                if (guess3 == "4")
+                {
+                    AnswerCorrect();
+                }
+                else
+                {
+                    Debug.Log("Wrong");
+                }
+                break;
+            case 1:
+                if (guess3 == "100")
+                {
+                    AnswerCorrect();
+                }
+                else
+                {
+                    Debug.Log("Wrong");
+                }
+                break;
+            case 2:
+                if (guess3 == "120")
+                {
+                    AnswerCorrect();
+                }
+                else
+                {
+                    Debug.Log("Wrong");
+                }
+                break;
+            case 3:
+                if (guess3 == "5")
+                {
+                    AnswerCorrect();
+                }
+                else
+                {
+                    Debug.Log("Wrong");
+                }
+                break;
+        }
+    }
+    void ProcessQuestion4()
+    {
+        guess4 = paper4InputField.text;
+        Debug.Log(guess4);
+        paper4InputField.clearInputField();
+        curSelect = 0;
+        NoneSelect();
+        paper4.SetActive(false);
+        slot4Full = false;
+        paperOnScreen--;
+        //Checker
+        switch (question1No)
+        {
+            case 0:
+                if (guess4 == "4")
+                {
+                    AnswerCorrect();
+                }
+                else
+                {
+                    Debug.Log("Wrong");
+                }
+                break;
+            case 1:
+                if (guess4 == "100")
+                {
+                    AnswerCorrect();
+                }
+                else
+                {
+                    Debug.Log("Wrong");
+                }
+                break;
+            case 2:
+                if (guess4 == "120")
+                {
+                    AnswerCorrect();
+                }
+                else
+                {
+                    Debug.Log("Wrong");
+                }
+                break;
+            case 3:
+                if (guess4 == "5")
+                {
+                    AnswerCorrect();
+                }
+                else
+                {
+                    Debug.Log("Wrong");
+                }
+                break;
+        }
+    }
+
     public void SpawnQuestion()
     {
         if (slot1Full) //if slot 1 full
@@ -271,25 +593,29 @@ public class Question : MonoBehaviour
                     if (!slot4Full) // if slot 4 empty place into slot 4
                     {
                         slot4Full = true;
-                        question4Text.text = question[Random.Range(0, question.Length)];
+                        question4No = Random.Range(0, question.Length);
+                        question4Text.text = question[question4No];
                     }
                 }
                 if (!slot3Full) //if slot 3 empty place into slot 3
                 {
                     slot3Full = true;
-                    question3Text.text = question[Random.Range(0, question.Length)];
+                    question3No = Random.Range(0, question.Length);
+                    question3Text.text = question[question3No];
                 }
             }
             if (!slot2Full)//if slot 2 is empty place into slot 2
             {
                 slot2Full = true;
-                question2Text.text = question[Random.Range(0, question.Length)];
+                question2No = Random.Range(0, question.Length);
+                question2Text.text = question[question2No];
             }
         }
         if (!slot1Full) //if slot 1 is empty place in slot 1
         {
             slot1Full = true;
-            question1Text.text = question[Random.Range(0, question.Length)];
+            question1No = Random.Range(0, question.Length);
+            question1Text.text = question[question1No];
         }
     }
     public void ShowHint()
@@ -359,6 +685,7 @@ public class Question : MonoBehaviour
     {
         StartCoroutine(ReadyCpr());
         guideText.text = "หน่วยแพทย์กำลังมา เตรียมนับเวลาถอยหลัง";
+        hint = "";
     }
     IEnumerator ReadyCpr()
     {
@@ -371,6 +698,7 @@ public class Question : MonoBehaviour
         yield return new WaitForSeconds(1.0f);
         GameController.gameStart = true;
         GameController.timeStart = true;
+        canShowHint = false;
         InvokeRepeating("spawnPaperEvery10Sec", 0.0f, 10.0f);
         guideText.text = "เริ่มนับบเวลาถอยหลัง 2 นาที";
         StartCoroutine(CprContinue());
@@ -393,6 +721,10 @@ public class Question : MonoBehaviour
     {
         Debug.Log("remove 1 paper");
         paperOnScreen--;
+    }
+    void AnswerCorrect()
+    {
+        Debug.Log("Correct");
     }
 }
 

@@ -2219,7 +2219,7 @@ MonoBehaviour:
   paper3: {fileID: 1484294753}
   paper4: {fileID: 833362104}
   paper1Select: {fileID: 1242473133}
-  paper2Select: {fileID: 194622178}
+  paper2Select: {fileID: 1518604263}
   paper3Select: {fileID: 194622178}
   paper4Select: {fileID: 2145907732}
   question1Text: {fileID: 1530677022}
@@ -2230,6 +2230,10 @@ MonoBehaviour:
   paper2InputField: {fileID: 1520950835}
   paper3InputField: {fileID: 1540908664}
   paper4InputField: {fileID: 1235344037}
+  paper1InputObj: {fileID: 1886620866}
+  paper2InputObj: {fileID: 1520950833}
+  paper3InputObj: {fileID: 1540908662}
+  paper4InputObj: {fileID: 1235344035}
   paperOnScreen: 0
   curSelect: 0
   slot1Full: 0
@@ -2877,7 +2881,7 @@ GameObject:
   - component: {fileID: 1235344038}
   - component: {fileID: 1235344037}
   m_Layer: 8
-  m_Name: InputField
+  m_Name: InputField4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3466,7 +3470,7 @@ GameObject:
   - component: {fileID: 1520950836}
   - component: {fileID: 1520950835}
   m_Layer: 8
-  m_Name: InputField
+  m_Name: InputField2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3780,7 +3784,7 @@ GameObject:
   - component: {fileID: 1540908665}
   - component: {fileID: 1540908664}
   m_Layer: 8
-  m_Name: InputField
+  m_Name: InputField3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4930,7 +4934,7 @@ GameObject:
   - component: {fileID: 1886620869}
   - component: {fileID: 1886620868}
   m_Layer: 8
-  m_Name: InputField
+  m_Name: InputField1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5076,7 +5080,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1972696119
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5663,7 +5667,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2145907733
 RectTransform:
   m_ObjectHideFlags: 0
