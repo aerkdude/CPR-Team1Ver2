@@ -51,10 +51,11 @@ public class TutorialManager : MonoBehaviour
     }
     IEnumerator stickHand()
     {
-        guideText.text = "ลองผสานมือตามภาพ";
+        guideText.text = "ลองประสานมือตามภาพ";
         hands.gameObject.SetActive(true);
         yield return new WaitForSeconds(10.0f);
-        guideText.text = "กดปุ่มเพื่อเริ่มเกม";
+        guideText.text = "";
+        bgpanel.SetActive(false);
         hands.gameObject.SetActive(false);
         ShowButton();
     }
