@@ -6,12 +6,16 @@ using UnityEngine.UI;
 public class Question : MonoBehaviour
 {
     public GameObject questionCanvas;
+    public GameObject canvasTimer;
+    public GameObject paperCanvas;
     
     public GameObject phone;
     public GameObject shoulder;
     public GameObject hintPanel;
     public GameObject guidePanel;
     public GameObject quizPanel;
+    public GameObject lightGuide;
+    public Animator lightObject;
     public Text quizScoreText;
     public Text questionText;
     public Text hintText;
@@ -19,7 +23,6 @@ public class Question : MonoBehaviour
 
     public static bool hitShoulder;
     public bool activeCancas;
-    public float Timer;
     private bool activateQuestion;
     public bool canShowHint;
     public string[] question;
@@ -30,6 +33,10 @@ public class Question : MonoBehaviour
     private string guess4;
     public string hint;
     public static int quizScore;
+    public bool showQuizScore;
+    public bool canLightOff;
+    public bool canLightOn;
+    public static bool canAnswerPreQuiz;
 
     //select paper
     public GameObject paper1;
@@ -53,7 +60,7 @@ public class Question : MonoBehaviour
     public GameObject paper3InputObj;
     public GameObject paper4InputObj;
 
-    public int paperOnScreen;
+    public static int paperOnScreen;
     public int curSelect;
     public bool slot1Full;
     public bool slot2Full;
@@ -75,11 +82,18 @@ public class Question : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        paperCanvas.SetActive(true);
+        canvasTimer.SetActive(false);
+        canAnswerPreQuiz = true;
+        canLightOn = false;
+        lightGuide.SetActive(false);
+        canLightOff = true;
+        showQuizScore = false;
         quizPanel.SetActive(false);
         quizScore = 0;
         quizScoreText.text = "";
 
-    paper1Select.SetActive(false);
+        paper1Select.SetActive(false);
         paper2Select.SetActive(false);
         paper3Select.SetActive(false);
         paper4Select.SetActive(false);
@@ -92,7 +106,6 @@ public class Question : MonoBehaviour
         hint = "";
         guess = "";
         hintText.text = "";
-        Timer = 0;
 
         guess1 = "";
         guess2 = "";
@@ -124,11 +137,12 @@ public class Question : MonoBehaviour
     {
         if (GameController.gameStart)
         {
+            canvasTimer.SetActive(true);
             CprStart();
         }
         if (!GameController.gameStart)
         {
-            if (Input.GetKeyDown(KeyCode.Return) && canShowHint) //Send Answer
+            if (Input.GetKeyDown(KeyCode.Return) && canShowHint && canAnswerPreQuiz) //Send Answer
             {
                 ProcessText();
                 //ShowHint();
@@ -139,6 +153,7 @@ public class Question : MonoBehaviour
         if (GameController.gameEnd)
         {
             guidePanel.SetActive(false);
+            paperCanvas.SetActive(false);
             guideText.text = "";
         }
         //Shoulder Check
@@ -148,10 +163,41 @@ public class Question : MonoBehaviour
             hitShoulder = false;
         }
         InputAnswer.ActivateInputField();
+        //show UI quiz score
+        if (showQuizScore)
+        {
+            quizScoreText.text = "Quiz Score: " + quizScore;
+        }
     }
 
+    void LightOff()
+    {
+        canLightOn = true;
+        lightObject.SetBool("LightOff", true);
+        lightGuide.SetActive(true);
+    }
+    void LightOn()
+    {
+        canLightOff = false;
+        canLightOn = false;
+        lightObject.SetBool("LightOff", false);
+        lightObject.SetTrigger("TurnOn");
+        StartCoroutine(WaitLightTurnOff());
+    }
+    IEnumerator WaitLightTurnOff()
+    {
+        yield return new WaitForSeconds(10.0f);
+        canLightOff = true;
+    }
     private void CprStart()
     {
+        if (Input.GetKeyDown(KeyCode.L) && canLightOn)
+        {
+            Debug.Log("trun light");
+            lightGuide.SetActive(false);
+            LightOn();
+        }
+
         if (paperOnScreen < 1)
         {
             if (Input.GetKeyDown(KeyCode.Return) && canShowHint) //Send Answer
@@ -161,16 +207,19 @@ public class Question : MonoBehaviour
                 questionCanvas.SetActive(false);
             }
         }
-        if (Input.GetKeyDown(KeyCode.R)) //Send Answer
-        {
-            CancelInvoke("spawnPaperEvery10Sec");
-            InvokeRepeating("spawnPaperEvery10Sec", 10.0f, 10.0f);
-            removePaper();
-            slot4Full = false;
-        }
+
         //paper select
         if(paperOnScreen > 0)
         {
+            if(paperOnScreen >= 3 && canLightOff)
+            {
+                LightOff();
+            }
+            if(paperOnScreen < 3)
+            {
+                lightObject.SetBool("LightOff", false);
+            }
+            
             if (Input.GetKeyDown(KeyCode.LeftArrow))
             {
                 if (slot1Full)
@@ -235,6 +284,8 @@ public class Question : MonoBehaviour
                     if (Input.GetKeyDown(KeyCode.Return))
                     {
                         ProcessQuestion1();
+                        CancelInvoke("spawnPaperEvery10Sec");
+                        InvokeRepeating("spawnPaperEvery10Sec", 2.0f, 5.0f);
                     }
                 }
             }
@@ -249,6 +300,8 @@ public class Question : MonoBehaviour
                     if (Input.GetKeyDown(KeyCode.Return))
                     {
                         ProcessQuestion2();
+                        CancelInvoke("spawnPaperEvery10Sec");
+                        InvokeRepeating("spawnPaperEvery10Sec", 2.0f, 5.0f);
                     }
                 }
             }
@@ -263,6 +316,8 @@ public class Question : MonoBehaviour
                     if (Input.GetKeyDown(KeyCode.Return))
                     {
                         ProcessQuestion3();
+                        CancelInvoke("spawnPaperEvery10Sec");
+                        InvokeRepeating("spawnPaperEvery10Sec", 2.0f, 5.0f);
                     }
                 }
             }
@@ -277,6 +332,8 @@ public class Question : MonoBehaviour
                     if (Input.GetKeyDown(KeyCode.Return))
                     {
                         ProcessQuestion4();
+                        CancelInvoke("spawnPaperEvery10Sec");
+                        InvokeRepeating("spawnPaperEvery10Sec", 2.0f, 5.0f);
                     }
                 }
             }
@@ -344,12 +401,14 @@ public class Question : MonoBehaviour
                     AnswerCorrect();
                     ResetAnswer();
                     StartCoroutine(DelayShoulderText());
+                    canShowHint = false;
                 }
                 else
                 {
                     Debug.Log("Wrong");
                     ResetAnswer();
                     StartCoroutine(DelayShoulderText());
+                    canShowHint = false;
                 }
                 break;
             case 102:
@@ -358,12 +417,14 @@ public class Question : MonoBehaviour
                     AnswerCorrect();
                     ResetAnswer();
                     StartCoroutine(PrepareCall());
+                    canShowHint = false;
                 }
                 else
                 {
                     Debug.Log("Wrong");
                     ResetAnswer();
                     StartCoroutine(PrepareCall());
+                    canShowHint = false;
                 }
                 break;
         }
@@ -635,7 +696,6 @@ public class Question : MonoBehaviour
     {
         ShowHint();
         guess = "";
-        Timer = 0;
         questionCanvas.SetActive(false);
         //canShowHint = false;
         InputAnswer.clearInputField();
@@ -661,6 +721,7 @@ public class Question : MonoBehaviour
     {
         guidePanel.SetActive(false);
         yield return new WaitForSeconds(2.0f);
+        canAnswerPreQuiz = true;
         questionCanvas.gameObject.SetActive(true);
         canShowHint = true;
         InputAnswer.ActivateInputField();
@@ -670,6 +731,7 @@ public class Question : MonoBehaviour
     }
     IEnumerator DelayShoulderText()
     {
+        canAnswerPreQuiz = false;
         yield return new WaitForSeconds(3.0f);
         shoulder.SetActive(true);
         guidePanel.SetActive(true);
@@ -706,9 +768,9 @@ public class Question : MonoBehaviour
         GameController.gameStart = true;
         GameController.timeStart = true;
         quizPanel.SetActive(true);
-        quizScoreText.text = "Quiz Score: " + quizScore;
+        showQuizScore = true;
         canShowHint = false;
-        InvokeRepeating("spawnPaperEvery10Sec", 0.0f, 10.0f);
+        InvokeRepeating("spawnPaperEvery10Sec", 5.0f, 5.0f);
         guideText.text = "เริ่มนับบเวลาถอยหลัง 2 นาที";
         StartCoroutine(CprContinue());
     }

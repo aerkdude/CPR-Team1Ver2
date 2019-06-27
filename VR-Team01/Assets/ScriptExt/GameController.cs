@@ -24,20 +24,24 @@ public class GameController : MonoBehaviour
     public int curHp;
     public static float pushHp;
     public static float falseHp;
+    public float timer;
 
     //Score System
     public GameObject resultPanel;
     public Text pumpScoreText;
-    public Text resultText;
+    public Text quizScoreText;
+    public Text overallResultText;
     public int pumpScore;
 
     // Start is called before the first frame update
     void Start()
     {
+        greenCube.SetActive(false);
         gameEnd = false;
+        quizScoreText.text = "";
         resultPanel.SetActive(false);
         pumpScoreText.text = "";
-        resultText.text = "";
+        overallResultText.text = "";
         pumpScore = 0;
         timeStart = false;
         timeText.text = "";
@@ -46,9 +50,9 @@ public class GameController : MonoBehaviour
         slideValue = curTime / maxHP;
         hpLeft = 120f;
         curTime = 120f;
-        canPush = true;
+        canPush = false;
         startTime = 120.0f;
-        pushHp = 5.0f;
+        pushHp = 10.0f;
         //falseHp = 2.0f;
     }
 
@@ -58,6 +62,19 @@ public class GameController : MonoBehaviour
         if (gameStart)
         {
             CprStart();
+            timer += Time.deltaTime;
+            if (timer >= 0.6f)
+            {
+                timer = 0.0f;
+            }
+            if(timer>=0 && timer<= 0.12)
+            {
+                canPush = true;
+            }
+            if (timer > 0.12)
+            {
+                canPush = false;
+            }
         }
         /*if (Input.GetKeyDown(KeyCode.S))
         {
@@ -76,23 +93,37 @@ public class GameController : MonoBehaviour
             CancelInvoke("GoTime");
             showResult();
         }
-        if (Input.GetKey(KeyCode.Z))
+
+        if (gameEnd)
         {
-            SceneManager.LoadScene(0);
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                SceneManager.LoadScene(0);
+            }
+        }
+
+        if(Question.paperOnScreen >= 1)
+        {
+            pushHp = 5.0f;
+        }
+        if (Question.paperOnScreen < 1)
+        {
+            pushHp = 10.0f;
         }
     }
 
     public void showResult()
     {
         resultPanel.SetActive(true);
-        pumpScoreText.text = "ปั๊มจำนวน: "+pumpScore;
-        if(pumpScore >= 100)
+        pumpScoreText.text = "ปั๊มจำนวน: "+pumpScore+" / 100";
+        quizScoreText.text = "คะแนน Quiz: " + Question.quizScore + " / 10";
+        if(pumpScore >= 100 && Question.quizScore > 10)
         {
-            resultText.text = "คุณผ่านการทดสอบ";
+            overallResultText.text = "คุณผ่านการทดสอบ";
         }
         else
         {
-            resultText.text = "คุณไม่ผ่านการทดสอบ";
+            overallResultText.text = "คุณไม่ผ่านการทดสอบ";
         }
         gameEnd = true;
     }
@@ -135,7 +166,7 @@ public class GameController : MonoBehaviour
             if (other.gameObject.CompareTag("CheckHand"))
             {
                 Heal();
-                StartCoroutine(DelayPush());
+                //StartCoroutine(DelayPush());
                 Debug.Log("Hit");
             }
         }
@@ -162,7 +193,7 @@ public class GameController : MonoBehaviour
     IEnumerator DelayPush()
     {
         canPush = false;
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.6f);
         canPush = true;
     }
     
