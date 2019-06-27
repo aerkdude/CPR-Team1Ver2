@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class TutorialManager : MonoBehaviour
 {
     public TextMesh guideText;
+    public GameObject bgpanel;
     public GameObject remoteLeft;
     public GameObject remoteRight;
     public GameObject hands;
@@ -26,6 +27,7 @@ public class TutorialManager : MonoBehaviour
     IEnumerator LookAround()
     {
         yield return new WaitForSeconds(10.0f);
+        bgpanel.SetActive(true);
         guideText.text = "ลองมองรอบ ๆ นะ";
         StartCoroutine(LookAroundEnd());
     }
